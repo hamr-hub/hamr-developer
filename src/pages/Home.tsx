@@ -4,10 +4,10 @@ import { Link } from 'react-router-dom';
 
 export default function Home() {
   const stats = [
-    { value: '5,600+', label: 'GitHub Stars' },
-    { value: '1,200+', label: '注册开发者' },
-    { value: '200+', label: '开源贡献者' },
-    { value: '8', label: '开源项目' },
+    { value: '0', label: 'GitHub Stars' },
+    { value: '1', label: '注册开发者' },
+    { value: '1', label: '核心开发者' },
+    { value: '8', label: '开源仓库' },
   ];
 
   const features = [

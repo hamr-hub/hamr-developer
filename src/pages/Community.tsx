@@ -3,50 +3,45 @@ import { Users, GitPullRequest, Heart, Award } from 'lucide-react';
 
 export default function Community() {
   const stats = [
-    { label: '开发者', value: '1,200+', icon: <Users className="w-8 h-8" /> },
-    { label: '贡献者', value: '200+', icon: <GitPullRequest className="w-8 h-8" /> },
-    { label: 'GitHub Stars', value: '5,600+', icon: <Heart className="w-8 h-8" /> },
-    { label: '开源项目', value: '12', icon: <Award className="w-8 h-8" /> },
+    { label: '注册开发者', value: '1', icon: <Users className="w-8 h-8" /> },
+    { label: '贡献者', value: '1', icon: <GitPullRequest className="w-8 h-8" /> },
+    { label: 'GitHub Stars', value: '0', icon: <Heart className="w-8 h-8" /> },
+    { label: '开源仓库', value: '8', icon: <Award className="w-8 h-8" /> },
   ];
 
   const projects = [
     {
-      name: 'HamR Core',
-      description: '核心智能助理引擎 (Rust)',
-      difficulty: 'Advanced',
-      issues: 15,
-      url: 'https://github.com/hamr-hub/hamr-core',
-    },
-    {
-      name: 'HamR Web',
-      description: 'Web 控制面板 (TypeScript + React)',
+      name: 'hamr-website',
+      description: '官网 (hamr.store) — React + Three.js + Vite',
       difficulty: 'Intermediate',
-      issues: 8,
-      url: 'https://github.com/hamr-hub/hamr-web',
+      issues: 0,
+      url: 'https://github.com/hamr-hub/hamr-website',
     },
     {
-      name: 'HamR CLI',
-      description: '命令行工具 (Rust)',
+      name: 'hamr-developer',
+      description: '开发者门户 (hamr.top) — React + Vite + Tailwind',
       difficulty: 'Beginner',
-      issues: 5,
-      url: 'https://github.com/hamr-hub/hamr-cli',
+      issues: 0,
+      url: 'https://github.com/hamr-hub/hamr-developer',
     },
     {
-      name: 'HamR Docs',
-      description: '技术文档站 (Markdown + Docusaurus)',
+      name: 'hamr-docs',
+      description: '技术文档站 (docs.hamr.top) — React + Vite',
       difficulty: 'Beginner',
-      issues: 12,
+      issues: 0,
       url: 'https://github.com/hamr-hub/hamr-docs',
+    },
+    {
+      name: 'hamr-infra',
+      description: '基础设施配置 — Nginx + Docker + Prometheus',
+      difficulty: 'Advanced',
+      issues: 0,
+      url: 'https://github.com/hamr-hub/hamr-infra',
     },
   ];
 
   const contributors = [
-    { name: 'Alice Chen', avatar: '👩‍💻', contributions: 156 },
-    { name: 'Bob Wang', avatar: '👨‍💻', contributions: 142 },
-    { name: 'Carol Li', avatar: '👩‍🔬', contributions: 98 },
-    { name: 'David Zhang', avatar: '👨‍🎨', contributions: 87 },
-    { name: 'Emma Liu', avatar: '👩‍🚀', contributions: 76 },
-    { name: 'Frank Zhao', avatar: '👨‍🔧', contributions: 65 },
+    { name: 'hyx (Core Dev)', avatar: '👨‍💻', contributions: 120 },
   ];
 
   const howToContribute = [
@@ -197,21 +192,21 @@ export default function Community() {
 
         <div className="bg-gradient-to-r from-primary-500/20 to-purple-500/20 rounded-lg p-8 border border-primary-500/30">
           <div className="max-w-3xl mx-auto text-center">
-            <h3 className="text-2xl font-bold mb-4">加入我们的 Discord 社区</h3>
+            <h3 className="text-2xl font-bold mb-4">参与 HamR 开源建设</h3>
             <p className="text-gray-300 mb-6">
-              与全球开发者实时交流，获取技术支持，分享你的想法和项目。
+              HamR 处于早期开发阶段，欢迎开发者参与贡献代码、提交 Issue、完善文档。
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
-                href="https://discord.gg/hamr"
+                href="https://github.com/hamr-hub"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-primary"
               >
-                加入 Discord
+                访问 GitHub 组织
               </a>
               <a
-                href="https://github.com/hamr-hub/hamr/blob/main/CONTRIBUTING.md"
+                href="https://github.com/hamr-hub/hamr-website/blob/main/CONTRIBUTING.md"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-secondary"
