@@ -53,6 +53,11 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link to="/resources" className="text-gray-400 hover:text-white transition-colors">
+                  资源导航
+                </Link>
+              </li>
+              <li>
                 <a
                   href="https://docs.hamr.top"
                   className="text-gray-400 hover:text-white transition-colors"
@@ -66,6 +71,11 @@ export default function Footer() {
           <div>
             <h4 className="text-white font-semibold mb-4">社区</h4>
             <ul className="space-y-2">
+              <li>
+                <Link to="/projects" className="text-gray-400 hover:text-white transition-colors">
+                  开源项目
+                </Link>
+              </li>
               <li>
                 <Link to="/community" className="text-gray-400 hover:text-white transition-colors">
                   贡献指南

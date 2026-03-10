@@ -5,6 +5,8 @@ import Home from './pages/Home';
 import Docs from './pages/Docs';
 import SDK from './pages/SDK';
 import Community from './pages/Community';
+import Projects from './pages/Projects';
+import Resources from './pages/Resources';
 
 export default function App() {
   return (
@@ -16,6 +18,8 @@ export default function App() {
             <Route path="/" element={<Home />} />
             <Route path="/docs" element={<Docs />} />
             <Route path="/sdk" element={<SDK />} />
+            <Route path="/projects" element={<Projects />} />
+            <Route path="/resources" element={<Resources />} />
             <Route path="/community" element={<Community />} />
           </Routes>
         </main>

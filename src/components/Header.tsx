@@ -7,8 +7,10 @@ export default function Header() {
 
   const navLinks = [
     { to: '/', label: '首页' },
+    { to: '/projects', label: '开源项目' },
     { to: '/docs', label: 'API 文档' },
     { to: '/sdk', label: 'SDK' },
+    { to: '/resources', label: '资源' },
     { to: '/community', label: '社区' },
   ];
 
