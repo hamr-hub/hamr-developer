@@ -99,6 +99,18 @@ const projects = [
     url: 'https://github.com/hamr-hub/hamr-jiabu',
     topics: ['rust', 'ai', 'decision-engine'],
   },
+  {
+    name: 'hamr-mood-calender',
+    fullName: 'HamR Mood Calendar',
+    description: '心情日历应用，记录每日心情数据，支持日历视图与心情统计图表',
+    language: 'TypeScript',
+    type: '客户端',
+    status: 'Active',
+    stars: 0,
+    forks: 0,
+    url: 'https://github.com/hamr-hub/hamr-mood-calender',
+    topics: ['react', 'vite', 'calendar', 'mood-tracking'],
+  },
 ];
 
 const LANGUAGES = ['全部', 'TypeScript', 'Rust', 'Shell'];

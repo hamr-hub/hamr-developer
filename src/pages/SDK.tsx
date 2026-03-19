@@ -1,5 +1,24 @@
 import { motion } from 'framer-motion';
-import { Download, Code2, Package, Terminal } from 'lucide-react';
+import { useState } from 'react';
+import { Download, Code2, Package, Terminal, Check, Copy } from 'lucide-react';
+
+function CopyButton({ text }: { text: string }) {
+  const [copied, setCopied] = useState(false);
+  const handleCopy = () => {
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+  return (
+    <button
+      onClick={handleCopy}
+      className="text-gray-500 hover:text-white transition-colors text-xs flex items-center gap-1"
+    >
+      {copied ? <Check className="w-3 h-3 text-green-400" /> : <Copy className="w-3 h-3" />}
+      {copied ? '已复制' : '复制'}
+    </button>
+  );
+}
 
 export default function SDK() {
   const sdks = [
@@ -8,9 +27,9 @@ export default function SDK() {
       icon: '🟦',
       package: '@hamr/core',
       install: 'npm install @hamr/core',
-      version: 'v1.2.0',
-      stars: '1.2k',
-      downloads: '50k/week',
+      version: 'v0.1.0',
+      status: '开发中',
+      statusColor: 'bg-yellow-500/20 text-yellow-400',
       docs: 'https://docs.hamr.top/sdk/typescript',
     },
     {
@@ -18,9 +37,9 @@ export default function SDK() {
       icon: '🦀',
       package: 'hamr-sdk',
       install: 'cargo add hamr-sdk',
-      version: 'v0.8.0',
-      stars: '800',
-      downloads: '5k/week',
+      version: 'v0.1.0',
+      status: '开发中',
+      statusColor: 'bg-yellow-500/20 text-yellow-400',
       docs: 'https://docs.hamr.top/sdk/rust',
     },
     {
@@ -28,9 +47,9 @@ export default function SDK() {
       icon: '🐍',
       package: 'hamr-python',
       install: 'pip install hamr-python',
-      version: 'v1.0.0',
-      stars: '600',
-      downloads: '10k/week',
+      version: '计划中',
+      status: '计划中',
+      statusColor: 'bg-gray-500/20 text-gray-400',
       docs: 'https://docs.hamr.top/sdk/python',
     },
     {
@@ -38,9 +57,9 @@ export default function SDK() {
       icon: '🐹',
       package: 'hamr-go',
       install: 'go get github.com/hamr-hub/hamr-go',
-      version: 'v0.5.0',
-      stars: '400',
-      downloads: '3k/week',
+      version: '计划中',
+      status: '计划中',
+      statusColor: 'bg-gray-500/20 text-gray-400',
       docs: 'https://docs.hamr.top/sdk/go',
     },
   ];
@@ -51,7 +70,7 @@ import { HamRClient } from '@hamr/core';
 // 1. 初始化客户端
 const client = new HamRClient({
   apiKey: process.env.HAMR_API_KEY,
-  endpoint: 'https://api.hamr.store/v1',
+  endpoint: 'https://api.hamr.top/v1',
 });
 
 // 2. 发送对话请求
@@ -65,7 +84,6 @@ console.log(response.text);
 
 // 3. 获取设备列表
 const devices = await client.devices.list();
-console.log(devices);
 
 // 4. 控制设备
 await client.devices.control('light_001', {
@@ -81,8 +99,8 @@ await client.devices.control('light_001', {
     },
     {
       icon: <Package className="w-6 h-6" />,
-      title: '零依赖',
-      description: '轻量级设计，无额外依赖，打包体积小于 50KB',
+      title: '轻量设计',
+      description: '无额外依赖，打包体积最小化',
     },
     {
       icon: <Terminal className="w-6 h-6" />,
@@ -91,8 +109,8 @@ await client.devices.control('light_001', {
     },
     {
       icon: <Download className="w-6 h-6" />,
-      title: '持续更新',
-      description: '每月发布新版本，积极响应社区反馈',
+      title: '持续迭代',
+      description: '项目处于早期阶段，欢迎参与贡献 SDK',
     },
   ];
 
@@ -108,7 +126,7 @@ await client.devices.control('light_001', {
           <h1 className="text-4xl md:text-5xl font-bold mb-4">SDK 下载</h1>
           <p className="text-gray-400 text-lg max-w-3xl mx-auto">
             选择你熟悉的编程语言，开始构建智能家居应用。
-            所有 SDK 开源、文档完善、持续维护。
+            SDK 目前处于早期开发阶段，欢迎参与贡献。
           </p>
         </motion.div>
 
@@ -129,25 +147,15 @@ await client.devices.control('light_001', {
                     <code className="text-sm text-gray-400">{sdk.package}</code>
                   </div>
                 </div>
-                <span className="bg-primary-500 text-white text-xs px-3 py-1 rounded-full">
-                  {sdk.version}
+                <span className={`text-xs px-3 py-1 rounded-full ${sdk.statusColor}`}>
+                  {sdk.status}
                 </span>
-              </div>
-
-              <div className="flex space-x-6 text-sm text-gray-400 mb-4">
-                <span>⭐ {sdk.stars}</span>
-                <span>📦 {sdk.downloads}</span>
               </div>
 
               <div className="bg-gray-800 rounded-lg p-4 mb-4">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm text-gray-400">安装命令</span>
-                  <button
-                    onClick={() => navigator.clipboard.writeText(sdk.install)}
-                    className="text-primary-500 hover:text-primary-400 text-sm"
-                  >
-                    复制
-                  </button>
+                  <CopyButton text={sdk.install} />
                 </div>
                 <code className="text-primary-400 text-sm block">{sdk.install}</code>
               </div>
@@ -181,8 +189,11 @@ await client.devices.control('light_001', {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="code-block max-w-4xl mx-auto"
+            className="code-block max-w-4xl mx-auto relative"
           >
+            <div className="absolute top-3 right-3">
+              <CopyButton text={quickStart} />
+            </div>
             <pre className="text-gray-300 text-sm leading-relaxed">{quickStart}</pre>
           </motion.div>
         </div>
@@ -208,17 +219,17 @@ await client.devices.control('light_001', {
         </div>
 
         <div className="bg-gradient-to-r from-primary-500/20 to-purple-500/20 rounded-lg p-8 text-center border border-primary-500/30">
-          <h3 className="text-2xl font-bold mb-4">需要其他语言的 SDK？</h3>
+          <h3 className="text-2xl font-bold mb-4">想贡献 SDK？</h3>
           <p className="text-gray-300 mb-6">
-            我们计划支持更多编程语言。如果您希望贡献某个语言的 SDK，欢迎提交 PR！
+            HamR SDK 处于早期阶段，欢迎开发者参与贡献各语言的 SDK 实现。
           </p>
           <a
-            href="https://github.com/hamr-hub/hamr/issues/new"
+            href="https://github.com/hamr-hub"
             target="_blank"
             rel="noopener noreferrer"
             className="btn-primary inline-block"
           >
-            提交语言支持请求
+            访问 GitHub 组织
           </a>
         </div>
       </div>

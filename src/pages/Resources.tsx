@@ -1,5 +1,26 @@
 import { motion } from 'framer-motion';
-import { BookOpen, Zap, Play, Server, Activity, Github, Key, Terminal, FileText, Package } from 'lucide-react';
+import { useState } from 'react';
+import { BookOpen, Zap, Play, Server, Activity, Github, Key, Terminal, FileText, Package, Check, Copy } from 'lucide-react';
+
+function CopyButton({ text, label = '复制' }: { text: string; label?: string }) {
+  const [copied, setCopied] = useState(false);
+  const handleCopy = () => {
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+  return (
+    <button
+      onClick={handleCopy}
+      className={`ml-2 transition-colors text-xs flex items-center gap-1 ${
+        copied ? 'text-green-400' : 'text-gray-500 hover:text-white'
+      }`}
+    >
+      {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+      {copied ? '已复制' : label}
+    </button>
+  );
+}
 
 const resources = [
   {
@@ -194,12 +215,7 @@ export default function Resources() {
                 </div>
                 <div className="flex items-center justify-between bg-gray-800 rounded px-3 py-2 mb-3">
                   <code className="text-sm text-primary-300 flex-1 truncate">{dl.command}</code>
-                  <button
-                    onClick={() => navigator.clipboard.writeText(dl.command)}
-                    className="ml-2 text-gray-500 hover:text-white transition-colors text-xs"
-                  >
-                    复制
-                  </button>
+                  {dl.command !== '点击下载' && <CopyButton text={dl.command} />}
                 </div>
                 <a
                   href={dl.docs}

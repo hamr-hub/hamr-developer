@@ -1,11 +1,35 @@
 import { motion } from 'framer-motion';
-import { Book, Code, Database, Zap } from 'lucide-react';
+import { Book, Code, Database, Zap, Rocket, AlertCircle, Check, Copy } from 'lucide-react';
 import { useState } from 'react';
 
+function CopyButton({ text }: { text: string }) {
+  const [copied, setCopied] = useState(false);
+  const handleCopy = () => {
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+  return (
+    <button
+      onClick={handleCopy}
+      className="text-gray-500 hover:text-white transition-colors text-xs flex items-center gap-1"
+    >
+      {copied ? <Check className="w-3 h-3 text-green-400" /> : <Copy className="w-3 h-3" />}
+      {copied ? '已复制' : '复制'}
+    </button>
+  );
+}
+
 export default function Docs() {
-  const [selectedEndpoint, setSelectedEndpoint] = useState('chat');
+  const [selectedEndpoint, setSelectedEndpoint] = useState('quickstart');
 
   const endpoints = [
+    {
+      id: 'quickstart',
+      name: 'Quick Start',
+      description: '5 分钟快速上手',
+      icon: <Rocket className="w-5 h-5" />,
+    },
     {
       id: 'chat',
       name: 'Chat API',
@@ -24,9 +48,35 @@ export default function Docs() {
       description: '自动化规则引擎',
       icon: <Code className="w-5 h-5" />,
     },
+    {
+      id: 'rate-limits',
+      name: 'Rate Limits',
+      description: '请求频率限制',
+      icon: <AlertCircle className="w-5 h-5" />,
+    },
   ];
 
   const apiExamples: Record<string, string> = {
+    quickstart: `# 步骤 1：获取 API Key
+# 访问 https://dashboard.hamr.top 申请 API Key
+
+# 步骤 2：安装 SDK
+npm install @hamr/core
+
+# 步骤 3：初始化并调用
+import { HamRClient } from '@hamr/core';
+
+const client = new HamRClient({
+  apiKey: 'YOUR_API_KEY',
+});
+
+// 测试连接
+const response = await client.chat({
+  message: '你好，HamR！',
+});
+
+console.log(response.text);
+// "你好！我是 HamR 智能助理，有什么可以帮你？"`,
     chat: `POST /v1/chat
 Content-Type: application/json
 Authorization: Bearer YOUR_API_KEY
@@ -39,7 +89,7 @@ Authorization: Bearer YOUR_API_KEY
   }
 }
 
-// Response
+// Response 200
 {
   "text": "好的，已为您打开客厅的灯",
   "actions": [
@@ -48,12 +98,13 @@ Authorization: Bearer YOUR_API_KEY
       "device_id": "light_001",
       "action": "turn_on"
     }
-  ]
+  ],
+  "request_id": "req_abc123"
 }`,
     devices: `GET /v1/devices
 Authorization: Bearer YOUR_API_KEY
 
-// Response
+// Response 200
 {
   "devices": [
     {
@@ -66,7 +117,8 @@ Authorization: Bearer YOUR_API_KEY
         "brightness": 80
       }
     }
-  ]
+  ],
+  "total": 1
 }
 
 // 控制设备
@@ -74,6 +126,12 @@ POST /v1/devices/light_001/control
 {
   "action": "set_brightness",
   "value": 50
+}
+
+// Response 200
+{
+  "success": true,
+  "device_id": "light_001"
 }`,
     automation: `POST /v1/automations
 Authorization: Bearer YOUR_API_KEY
@@ -99,8 +157,42 @@ Authorization: Bearer YOUR_API_KEY
       "action": "turn_on"
     }
   ]
+}
+
+// Response 201
+{
+  "id": "auto_001",
+  "name": "晚上自动开灯",
+  "status": "active"
+}`,
+    'rate-limits': `# 请求频率限制
+
+## 默认限制
+- 免费计划：60 次/分钟
+- 基础计划：300 次/分钟
+- 企业计划：自定义
+
+## 响应 Headers
+X-RateLimit-Limit: 60
+X-RateLimit-Remaining: 45
+X-RateLimit-Reset: 1712345678
+
+## 超出限制 Response 429
+{
+  "error": "rate_limit_exceeded",
+  "message": "Too many requests",
+  "retry_after": 30
+}
+
+## 最佳实践
+// 检查剩余配额
+const remaining = response.headers['x-ratelimit-remaining'];
+if (parseInt(remaining) < 10) {
+  console.warn('API 配额即将用完');
 }`,
   };
+
+  const currentEndpoint = endpoints.find((e) => e.id === selectedEndpoint);
 
   return (
     <div className="min-h-screen bg-black text-white pt-16">
@@ -154,38 +246,41 @@ Authorization: Bearer YOUR_API_KEY
               transition={{ duration: 0.4 }}
               className="bg-gray-900 rounded-lg border border-gray-800 p-8"
             >
-              <h2 className="text-2xl font-bold mb-4">
-                {endpoints.find((e) => e.id === selectedEndpoint)?.name}
-              </h2>
-              <p className="text-gray-400 mb-6">
-                {endpoints.find((e) => e.id === selectedEndpoint)?.description}
-              </p>
+              <h2 className="text-2xl font-bold mb-4">{currentEndpoint?.name}</h2>
+              <p className="text-gray-400 mb-6">{currentEndpoint?.description}</p>
 
               <div className="mb-6">
-                <h3 className="text-lg font-semibold mb-3">请求示例</h3>
-                <div className="code-block">
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-lg font-semibold">
+                    {selectedEndpoint === 'quickstart' ? '入门示例' : '请求示例'}
+                  </h3>
+                  <CopyButton text={apiExamples[selectedEndpoint]} />
+                </div>
+                <div className="code-block relative">
                   <pre className="text-gray-300 text-sm leading-relaxed">
                     {apiExamples[selectedEndpoint]}
                   </pre>
                 </div>
               </div>
 
-              <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
-                <h3 className="text-lg font-semibold mb-3">认证方式</h3>
-                <p className="text-gray-400 mb-2">
-                  所有 API 请求需要在 HTTP Header 中包含 API Key：
-                </p>
-                <code className="block bg-gray-900 px-4 py-2 rounded text-primary-400 text-sm">
-                  Authorization: Bearer YOUR_API_KEY
-                </code>
-                <p className="text-gray-400 text-sm mt-3">
-                  在{' '}
-                  <a href="https://dashboard.hamr.top" className="text-primary-500 hover:underline">
-                    开发者控制台
-                  </a>{' '}
-                  获取您的 API Key
-                </p>
-              </div>
+              {selectedEndpoint !== 'rate-limits' && selectedEndpoint !== 'quickstart' && (
+                <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                  <h3 className="text-lg font-semibold mb-3">认证方式</h3>
+                  <p className="text-gray-400 mb-2">
+                    所有 API 请求需要在 HTTP Header 中包含 API Key：
+                  </p>
+                  <code className="block bg-gray-900 px-4 py-2 rounded text-primary-400 text-sm">
+                    Authorization: Bearer YOUR_API_KEY
+                  </code>
+                  <p className="text-gray-400 text-sm mt-3">
+                    在{' '}
+                    <a href="https://dashboard.hamr.top" className="text-primary-500 hover:underline">
+                      开发者控制台
+                    </a>{' '}
+                    获取您的 API Key
+                  </p>
+                </div>
+              )}
 
               <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
                 <a

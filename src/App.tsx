@@ -7,6 +7,7 @@ import SDK from './pages/SDK';
 import Community from './pages/Community';
 import Projects from './pages/Projects';
 import Resources from './pages/Resources';
+import NotFound from './pages/NotFound';
 
 export default function App() {
   return (
@@ -21,6 +22,7 @@ export default function App() {
             <Route path="/projects" element={<Projects />} />
             <Route path="/resources" element={<Resources />} />
             <Route path="/community" element={<Community />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
         <Footer />
